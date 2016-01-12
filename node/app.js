@@ -38,16 +38,16 @@
 //  0 or more yield statements in the body.
 
 //a lame, yet valid generator.
-//function *myFirstGenerator() {
-//    yield;
-//}
+function *myFirstGenerator() {
+    yield;
+}
 
 //we can see the * and yeild statements.
 //you can define a generator sans yield statements, although it will immediately set done = true when called.
 
-//function *noYield() {
-//
-//}
+function *noYield() {
+
+}
 
 
 //EXAMPLE no yield statement
@@ -55,10 +55,10 @@
 
 //a slightly more interesting generator
 
-//function *secondGen() {
-//    yield 'Hello';
-//    yield 'world!';
-//}
+function *secondGen() {
+    yield 'Hello';
+    yield 'world!';
+}
 
 //Lets take a look at some of the convenient ways to work with generators, due to them implementing the iteratble interface.
 
@@ -112,33 +112,34 @@
 //EXAMPLE initialize a generator
 //let runFunc = myFirstGenerator();
 
-//after we have a reference to our generator, start the generator by calling the next() method.
-//calling next() is how you start a newly initialized generator.
-// next will return the generator object, complete with two properties
-//let genObj = runFunc.next();
+// after we have a reference to our generator, start the generator by calling the next() method.
+// next() will return the generator object, complete with two properties and their current values
+// let genObj = runFunc.next();
 
 //console.log(genObj);
-//calling next again, will resume advance our generator either to the next yield statement, or return.
+//calling next again, will resume our generator either to the next yield statement (if they are any left), or return.
 //console.log(runFunc.next());
 
 //upon completion, done is set to true.
 
 //lets see another look at the control flow..
 
-//function *thirdGen() {
-//    console.log('Started!!');
-//    yield;
-//    console.log('resumed!');
-//    yield;
-//    return 'finished!';
-//}
+function *thirdGen() {
+    console.log('Started!!');
+    yield;
+    console.log('resumed!');
+    yield;
+    return 'finished!';
+}
+
+//I set this generator up with some log statements on the inside, which should be helpful
 
 //let run = thirdGen();
 
 //-> 'Started!"
-//run.next(); //advances thirdGen() to the first yield statement on line 130
-//run.next(); //advances thirdGen() to line 132;
-//console.log(run.next()); //one more time, line 133
+//run.next(); //advances thirdGen() to the first yield statement on line 129
+//run.next(); //advances thirdGen() to line 131;
+//console.log(run.next()); //one more time, line 132
 
 ////calls to next() will return value undefined after generator exits.
 //console.log(run.next());
@@ -152,14 +153,22 @@
 //It's particularly easy to implement infinite or boundless sequences with generators as iterators.
 //Let's make a simple generator that will generate a sequence of all natural numbers!
 
-//function *naturalNumbers() {
-//    let count = 0;
-//    while (true) {
-//        yield count++;
-//    }
-//}
+
+//usually code like this would get you into trouble, as it will never stop executing.
+//fortunately, generators can be paused and resumed, thus a while loop that will never fail
+//is no big deal, since it is being paused and resumed externally.
+
+//FUNCTION natural numbers
+function *naturalNumbers() {
+    let count = 0;
+    while (true) {
+        yield count++;
+    }
+}
 
 //let setOfNums = naturalNumbers();
+
+//lets ask the generator for 5 values
 
 //for (var i = 0; i < 5; i++) {
 //    console.log(setOfNums.next());
@@ -171,17 +180,18 @@
 
 //Generators can also be passed data, as Observers.
 
-//function *alphabet() {
-//    var first;
-//    while (true) {
-//        first = yield first;
-//    }
-//}
+//FUNCTION alphabet
+function *alphabet() {
+    let first;
+    while (true) {
+        first = yield first;
+    }
+}
 
 //when using a generator as observer, you need to call next at least once to advance to the first yield statement
 //at this point, the function will be ready to receive its first value.
 //let abc = alphabet();
-////ready it for input!;
+//ready it for input!;
 //abc.next();
 //console.log(abc.next('a'));
 //console.log(abc.next('b'));
@@ -191,13 +201,14 @@
 //when you call next(), you are basically asking the generator for a value.
 //It will give you what ever is yielded.
 //This is only half the story. You can also send values back into the generator by calling next()
-//When passing values thru next(), the value will be treated as the result of current yield statement.
-//function *manyYield() {
-//    let first = yield;
-//    //send out the fist value, and recieve the next one
-//    let second = yield first;
-//    return second;
-//}
+//EMPHASIS: When passing values thru next(), the value will be treated as the result of current yield statement.
+
+function *manyYield() {
+    let first = yield;
+    //send out the fist value, and recieve the next one
+    let second = yield first;
+    return second;
+}
 
 //let g = manyYield();
 //g.next();
