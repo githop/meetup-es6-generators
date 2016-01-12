@@ -2,51 +2,52 @@
  * Created by githop on 1/10/16.
  */
 
-//generators are functions that can be paused and resumed. <-- the short answer
-//
+/*
+ generators are functions that can be paused and resumed. <-- the short answer
 
-//Intro
-//It turns out functions that can be paused and resumed makes opens the door for many useful tasks.
-//They are used, among other things, for blocking on async function calls and can be used to implement iterables.
-//On the flip side, they can also be used to implement Observers.
-//The last really useful thing folks use generators for are cooperative multitasking, aka co-routines.
+ Intro
+ It turns out functions that can be paused and resumed makes opens the door for many useful tasks.
+ They are used, among other things, for blocking on async function calls and can be used to implement iterables.
+ On the flip side, they can also be used to implement Observers.
+ The last really useful thing folks use generators for are cooperative multitasking, aka co-routines.
 
-//The main difference between the above mentioned patterns concerns data flow.
+ The main difference between the above mentioned patterns concerns data flow.
 
-//If you want a generator to produce data,implement an iterator;
-//it will give you values when you ask for it (via calling the next() method).
+ If you want a generator to produce data,implement an iterator;
+ it will give you values when you ask for it (via calling the next() method).
 
-//if you want a generator to consume data, implement an observer,
-//you can push values to it (via passing a value to next() as a param, aka next(value));
+ if you want a generator to consume data, implement an observer,
+ you can push values to it (via passing a value to next() as a param, aka next(value));
 
-//if you want a generator to produce AND consume data, a co-routine is the way to go.
-//more to come!
+ if you want a generator to produce AND consume data, a co-routine is the way to go.
+ more to come!
 
-//when it comes to Angular...
-//There will be angular specific examples tonight, although tonight I am going to try something different.
-//This is perhaps the 3rd or 4th time I've been able to give a presentation at a meetup. I usually have slides
-//set up in order to guide the presentation. Rather than use static slides, I figure we can actually do some
-//live coding together and run through some examples together.
+ when it comes to Angular...
+ There will be angular specific examples tonight, although tonight I am going to try something different.
+ This is perhaps the 3rd or 4th time I've been able to give a presentation at a meetup. I usually have slides
+ set up in order to guide the presentation. Rather than use static slides, I figure we can actually do some
+ live coding together and run through some examples together.
 
-//(live coding has way more potential for failure then slides, but I did say I wanted to try something different...)
+ (live coding has way more potential for failure then slides, but I did say I wanted to try something different...)
 
-//Let's get started!
+ Let's get started!
+ */
 
-// 1. what a generator looks like
+//  1. what a generator looks like
 //	a function with a " * " prepended the function name AND
 //  0 or more yield statements in the body.
 
 //a lame, yet valid generator.
-function *myFirstGenerator() {
-    yield;
-}
+//function *myFirstGenerator() {
+//    yield;
+//}
 
 //we can see the * and yeild statements.
 //you can define a generator sans yield statements, although it will immediately set done = true when called.
 
-function *noYield() {
-
-}
+//function *noYield() {
+//
+//}
 
 
 //EXAMPLE no yield statement
@@ -54,16 +55,37 @@ function *noYield() {
 
 //a slightly more interesting generator
 
-function *secondGen() {
-    yield 'Hello';
-    yield 'world!';
-}
+//function *secondGen() {
+//    yield 'Hello';
+//    yield 'world!';
+//}
 
 //Lets take a look at some of the convenient ways to work with generators, due to them implementing the iteratble interface.
 
+//Is anyone familiar with ES6 Destructuing or Spread operator? If not, here's a little primer:
+
+//a simple function that returns an iterable, that is an array
+//const twoElementArray = () => {
+//    return ['hello', 'world!'];
+//};
+
+//Destructuring
+//let [hello, world] = twoElementArray();
+//console.log(hello, world);
+
+//for..of
+//for (let i of twoElementArray()) {
+//    console.log(i);
+//}
+
+//Spread operator
+//this example is a little redundant, but notice how we do not get a 2d array back?
+//console.log([...twoElementArray()]);
+
+//we can do all of this with generators as well!
+
 //EXAMPLE destructure output form generator.
 //let [hello, world] = secondGen();
-
 //console.log(`${hello} ${world}`);
 
 //a lot just happened there, lets take a step back and highlight some things.
@@ -77,7 +99,6 @@ function *secondGen() {
 //}
 
 //EXAMPLE spread operator
-
 
 //console.log([...secondGen()].join('\n'));
 
@@ -104,20 +125,20 @@ function *secondGen() {
 
 //lets see another look at the control flow..
 
-function *thirdGen() {
-    console.log('Started!!');
-    yield;
-    console.log('resumed!');
-    yield;
-    return 'finished!';
-}
+//function *thirdGen() {
+//    console.log('Started!!');
+//    yield;
+//    console.log('resumed!');
+//    yield;
+//    return 'finished!';
+//}
 
 //let run = thirdGen();
 
 //-> 'Started!"
-//run.next(); //advances thirdGen() to the first yield statement on line 109
-//run.next(); //advances thirdGen() to line 111;
-//console.log(run.next()); //one more time, line 112 ;)
+//run.next(); //advances thirdGen() to the first yield statement on line 130
+//run.next(); //advances thirdGen() to line 132;
+//console.log(run.next()); //one more time, line 133
 
 ////calls to next() will return value undefined after generator exits.
 //console.log(run.next());
@@ -131,15 +152,15 @@ function *thirdGen() {
 //It's particularly easy to implement infinite or boundless sequences with generators as iterators.
 //Let's make a simple generator that will generate a sequence of all natural numbers!
 
-function *naturalNumbers() {
-    let count = 0;
-    while (true) {
-        yield count++;
-    }
-}
+//function *naturalNumbers() {
+//    let count = 0;
+//    while (true) {
+//        yield count++;
+//    }
+//}
 
 //let setOfNums = naturalNumbers();
-//
+
 //for (var i = 0; i < 5; i++) {
 //    console.log(setOfNums.next());
 //}
@@ -150,12 +171,12 @@ function *naturalNumbers() {
 
 //Generators can also be passed data, as Observers.
 
-function *alphabet() {
-    var first;
-    while (true) {
-        first = yield first;
-    }
-}
+//function *alphabet() {
+//    var first;
+//    while (true) {
+//        first = yield first;
+//    }
+//}
 
 //when using a generator as observer, you need to call next at least once to advance to the first yield statement
 //at this point, the function will be ready to receive its first value.
@@ -171,12 +192,12 @@ function *alphabet() {
 //It will give you what ever is yielded.
 //This is only half the story. You can also send values back into the generator by calling next()
 //When passing values thru next(), the value will be treated as the result of current yield statement.
-function *manyYield() {
-    let first = yield;
-    //send out the fist value, and recieve the next one
-    let second = yield first;
-    return second;
-}
+//function *manyYield() {
+//    let first = yield;
+//    //send out the fist value, and recieve the next one
+//    let second = yield first;
+//    return second;
+//}
 
 //let g = manyYield();
 //g.next();
