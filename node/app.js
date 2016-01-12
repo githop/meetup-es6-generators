@@ -206,12 +206,15 @@ function *alphabet() {
 function *manyYield() {
     let first = yield;
     //send out the fist value, and recieve the next one
+    console.log('next!!', first);
     let second = yield first;
+
+    console.log('Next!!', second);
     return second;
 }
 
 //let g = manyYield();
-//g.next();
+//g.next(); //on line 207 waiting for input
 //console.log('CALL', g.next('first!'));
 //console.log('CALL', g.next('second!'));
 
