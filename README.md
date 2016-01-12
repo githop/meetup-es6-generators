@@ -3,6 +3,7 @@
 If you want to follow along, feel free to setup this project on your local machine.
 
 To set up the ES6 Generator Examples
+
 1.      git clone
 2.      cd node
 3.      npm install
