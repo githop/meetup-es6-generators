@@ -1,0 +1,6 @@
+.DS_Store
+.git
+.idea
+NG6-starter/node_modules
+NG6-starter/client/jspm_packages
+node/node_modules
