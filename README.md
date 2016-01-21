@@ -7,7 +7,8 @@ To set up the ES6 Generator Examples
 1.      git clone
 2.      cd node
 3.      npm install
-4.      node index.js
+4.      echo '{ "presets": ["es2015"] }' > .bablerc 
+5.      node index.js
 
 To Setup the NG6 Starter
 
